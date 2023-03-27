@@ -31,19 +31,19 @@ ev req = any rule
 -- little extra: EDSL to define ACL resources.
 --
 
-can :: [Agent] -> AccessMode -> ([Agent], AccessMode)
-can = (,)
+grant :: [Agent] -> AccessMode -> ([Agent], AccessMode)
+grant = (,)
 
-(~>) :: ([Agent], AccessMode) -> [Resource] -> AuthRule
-(as, ms) ~> rs = AuthRule { subject = as, mode = ms, object = rs }
+on :: ([Agent], AccessMode) -> [Resource] -> AuthRule
+on (as, ms) rs = AuthRule { subject = as, mode = ms, object = rs }
 
 
 --
 -- examples
 --
 
-acl = [ ["u1", "u2"] `can` read ~> ["r1"]
-      , ["u2"] `can` write ~> ["r1", "r2"]
+acl = [ grant ["u1", "u2"] read `on` ["r1"]
+      , grant ["u2"] write `on` ["r1", "r2"]
       ]
 
 printDecision req = putStrLn (show req) >> putStrLn granted >> putStrLn ""

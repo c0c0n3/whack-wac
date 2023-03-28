@@ -21,6 +21,11 @@ aclResOf (Root (u, i) ts) uri = head (aclPath tree uri)
   where
   tree = Node (u, Just i) ts
 
+
+--
+-- examples
+--
+
 hy = Root ("/r0", 0) [r1, r2]
 r1 = Node ("/r0/r1", Just 1)
      [ Node ("/r0/r1/r3", Just 2) []

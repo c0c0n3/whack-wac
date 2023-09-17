@@ -22,7 +22,4 @@
     pkgs = build (import ./pkgs/mkSysOutput.nix);
   in
     pkgs;
-    #  // {
-    #     inherit inputPkgs nixie;
-    # };
 }

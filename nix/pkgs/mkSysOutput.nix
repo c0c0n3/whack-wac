@@ -12,7 +12,7 @@
   defaultPackage.${system} = with sysPkgs;
   let
     haskell = haskellPackages.ghcWithPackages (ps: []);    # (1)
-    tex = nixie.packages.${system}.tex;
+    tex = nixie.packages.${system}.tex;                    # (2)
   in buildEnv {
     name = "whack-wac-shell";
     paths = [ haskell tex ];
@@ -22,3 +22,6 @@
 # ----
 # 1. Could use Haskell env from Nixie. Bring it in if really needed
 # though, since it comes with lots of packages.
+# 2. Adding extra Tex packages. The Nixie default env comes with the
+# most used ones, but we can easily add more if need be. See
+# - https://github.com/c0c0n3/nixie/wiki/Texie

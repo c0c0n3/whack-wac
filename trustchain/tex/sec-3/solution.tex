@@ -14,7 +14,7 @@ We will then engage with the WAC authors on GitHub to validate and
 refine the model. Following that, we will devise a specification extension
 to make the evaluation model more flexible so as to allow the evaluation
 of access control policies expressed in terms of predicates on a generic
-set---i.e., functions from a set $X$ to the Boolean algebra $\{0, 1\}$.
+set---i.e., functions from a set $X$ to the Boolean algebra $\{0,1\}$.
 At the same time, we will investigate another specification extension
 to accommodate data sharing through functional and homomorphic encryption
 techniques. Finally, we will encode the formal specification in an
@@ -31,7 +31,7 @@ in a tree $ResTree$ and, likewise, maintains an ACL resource tree
 $ACLResTree$ containing the policies that protect the resources in
 $ResTree$. Neither tree is empty. Now a tree is the same as a poset
 with a terminal object. Each child-parent edge is a morphism
-$child \rightarrow parent$ and the tree's root node is then terminal.
+$\ftype{child}{parent}$ and the tree's root node is then terminal.
 
 \begin{wrapfigure}{r}{0.5\textwidth}
   \includegraphics[width=0.5\textwidth]{effective-acl}
@@ -40,8 +40,8 @@ $child \rightarrow parent$ and the tree's root node is then terminal.
 \end{wrapfigure}
 
 On receiving an HTTP request, the server determines the ACL resource
-that protects the resource which the request targets. This lookup
-procedure is a functor $aclResOf : ResTree \rightarrow ACLResTree$.
+that protects the resource which the request targets. We model this
+lookup procedure as a functor $\fsig{aclResOf}{ResTree}{ACLResTree}$.
 Thus, each path $t_0 \rightarrow t_1 \rightarrow \ldots \rightarrow t_m$ in $ResTree$
 goes to a path $u_0 \rightarrow u_1 \rightarrow \ldots \rightarrow u_n$
 in $ACLResTree$ with $n \leq m$. Then if $r$ is the resource that
@@ -61,17 +61,71 @@ a given predicate $p$. In turn, $path$ can easily be defined on a
 canonical multi-way tree structure with the help of the standard
 list processing function $concatMap$. It is just as easy to prove
 $path$ correct by induction. Below is the corresponding Haskell code.
-\\
 \begin{lstlisting}[language=Haskell]
-data Tree a = Node a [Tree a]
+  data Tree a = Node a [Tree a]
 
-path :: (a -> Bool) -> Tree a -> [a]
-path p = collect []
-  where
-  collect xs (Node a ts) | p a       = a:xs
-                         | otherwise = concatMap (collect (a:xs)) ts
+  path :: (a -> Bool) -> Tree a -> [a]
+  path p = collect []
+    where
+    collect xs (Node a ts) | p a       = a:xs
+                           | otherwise = concatMap (collect (a:xs)) ts
 \end{lstlisting}
+
+In conclusion, we have turned an informal, ambiguous specification
+into a precise model that can be reasoned about mathematically and
+have encoded it into a program which can be proved to satisfy the
+specification. Crucially, functoriality captures WAC's idea of ACL
+resource inheritance. For example, with reference to the figure above,
+$r_7$ "inherits" $r_6$'s ACL resource, $p_3$, because the functor
+preserves paths, hence, necessarily, $aclResOf(r_7) = p_3$. Thus,
+the lengthily WAC discussion about effective ACL resources and ACL
+resource discovery can be distilled into the concise statement that
+there is a given functor  $\fsig{aclResOf}{ResTree}{ACLResTree}$.
 
 
 \subsubsection{Access control policies}
-wada wada
+As mentioned earlier, access control policies can be expressed in
+terms of predicates. In fact, the Boolean algebra operations on
+$\mathbb{B} = \{0,1\}$ are readily lifted to any function space
+$\mathbb{B}^X$ by point-wise definition---e.g., for any $p,q \in \mathbb{B}^X$
+define $p \wedge q$ as $(p \wedge q)(x) = p(x) \wedge q(x)$. We will
+exploit this fact to design a domain-specific language embedded in
+Idris or Haskell (EDSL\cite{gibbons2014folding}) which allows policy
+authors to express access control rules in a language close to plain
+English. For example, to state that an administrator can read or write
+a Web resource whereas anyone named Joe and born after 1995 is allowed
+to perform any operation on that resource, the policy author would
+write something similar to the following
+\begin{lstlisting}
+  role admin can read or can write
+  or anyone who has name (== "joe"), has dob (> 1995) can do anything
+\end{lstlisting}
+The policy interpreter parses the above into predicates on a given
+set $X$ (typically the data contained in a Web request, which, in
+this case, the policy author expects to have $name$ and $dob$ fields)
+and operations on $\mathbb{B}^X$, then uses these operations to combine
+and evaluate the predicates. Note that the policy interpreter is
+embedded, thus the user benefits from the read-eval-print loop
+(REPL) of the host language for developing and testing policies
+interactively.
+
+The policy-as-a-predicate WAC extension mentioned in the previous
+section will enable seamless integration of our EDSL in the Solid
+ecosystem. End-users will be able to express access control policies
+in a more concise, direct and natural way than it is currently possible
+with ODRL or Access Control Policy---the go-to RDF ontologies for
+ACL policies in Solid. For comparison purposes, expressing the same
+example EDSL policy as earlier in ODRL would require a page of terse
+Turtle as it can be evinced from the following snippet which only
+encodes the small fragment $dob (> 1995)$
+\begin{lstlisting}
+  @base <http://example.com/> .
+  @prefix ex: <http://example.com/> .
+  @prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+  @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+  ex:dob a odrl:Constraint ;
+      odrl:leftOperand odrl:dateTime ;
+      odrl:operator odrl:lt ;
+      odrl:rightOperand "1995"^^xsd:date .
+\end{lstlisting}

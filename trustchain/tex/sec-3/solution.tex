@@ -1,0 +1,35 @@
+\subsection{Proposed Solution}
+
+wada wada
+
+\subsubsection{Formal specification}
+The formalisation and extension of the WAC specification will be
+attained through subsequent refinement phases. In the tradition of
+functorial semantics\cite{lawvere1963functorial, bonchi2017functorial},
+a preliminary algebraic model will provide a concise, consistent and
+unambiguous interpretation of WAC in terms of basic structures and
+structure-preserving transformations in the elementary theory of the
+categories of sets\cite{lawvere1964elementary, leinster2014rethinking}.
+We will then engage with the WAC authors on GitHub to validate and
+refine the model. Following that, we will devise a specification extension
+to make the evaluation model more flexible so as to allow the evaluation
+of access control policies expressed in terms of predicates on a generic
+set---i.e., functions from a set $X$ to the Boolean algebra $\{0, 1\}$.
+At the same time, we will investigate another specification extension
+to accommodate data sharing through functional and homomorphic encryption
+techniques. Finally, we will encode the formal specification in an
+advanced programming language (either Haskell\cite{peytonjones:h98}
+or Idris\cite{brady2013idris}) which we will then leverage to produce
+a machine-checked proof of correctness of the resulting computer program.
+The resulting (correct!) executable specification will be submitted to
+the Solid project for consideration as a future version of WAC.
+
+\begin{lstlisting}[language=Haskell]
+data Tree a = Node a [Tree a]
+
+path :: (a -> Bool) -> Tree a -> [a]
+path p = collect []
+  where
+  collect xs (Node a ts) | p a       = a:xs
+                         | otherwise = concatMap (collect (a:xs)) ts
+\end{lstlisting}

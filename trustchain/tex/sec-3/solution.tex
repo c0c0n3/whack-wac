@@ -16,13 +16,14 @@ to make the evaluation model more flexible so as to allow the evaluation
 of access control policies expressed in terms of predicates on a generic
 set---i.e., functions from a set $X$ to the Boolean algebra $\{0,1\}$.
 At the same time, we will investigate another specification extension
-to accommodate data sharing through functional and homomorphic encryption
-techniques. Finally, we will encode the formal specification in an
-advanced programming language (either Haskell\cite{peytonjones:h98}
-or Idris\cite{brady2013idris}) which we will then leverage to produce
-a machine-checked proof of correctness of the resulting computer program.
-The resulting (correct!) executable specification will be submitted to
-the Solid project for consideration as a future version of WAC.
+to accommodate data sharing through functional\cite{boneh2011functional}
+and homomorphic\cite{gentry2009fully} encryption techniques. Finally,
+we will encode the formal specification in an advanced programming
+language (either Haskell\cite{peytonjones:h98} or Idris\cite{brady2013idris})
+which we will then leverage to produce a machine-checked proof of
+correctness of the resulting computer program. The resulting (correct!)
+executable specification will be submitted to the Solid project for
+consideration as a future version of WAC.
 
 To illustrate our approach, consider WAC's authorisation process (\S 5)
 and ACL resource discovery (\S 3.1). One possible interpretation of
@@ -129,3 +130,31 @@ encodes the small fragment $dob (> 1995)$
       odrl:operator odrl:lt ;
       odrl:rightOperand "1995"^^xsd:date .
 \end{lstlisting}
+
+
+\subsubsection{Decentralised, trusted access control}
+Our machine-checked, executable specification will enable certifying
+that a Solid server (pod) implements the formal WAC specification correctly.
+In particular, this guarantees that all certified server implementations
+evaluate ACL policies consistently, in the exact same way. With such
+a guarantee in place, users are able to share and migrate their data
+and ACL policies among any number of certified servers without the
+risk of data breaches due to different implementations interpreting
+the specification differently.
+
+The certification protocol entails property testing\cite{claessen2000quickcheck}
+and is grounded in the distributed identity software developed during
+the first round of open calls---e.g., DidRoom. The property testing
+tool attempts to find counterexamples of the algebraic laws of the
+specification which are thought to hold true by randomly choosing a
+large amount of data points according to a suitable probability
+distribution. The most basic property is that, given the same inputs,
+the executable specification's output and that of the server under
+certification agree. If the tool finds no flaws, entries are added
+to the distributed ledger to record the hashes of the software involved
+in the process (executable specification, server under certification,
+generated data points, etc.) and then a DID is assigned to the server
+which resolves to a DID document containing a specific property that
+witnesses the successful certification. An end-user interested in
+high-assurance, certified Solid servers would then choose one based
+on whether the server's DID document indicates successful certification.

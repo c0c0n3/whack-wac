@@ -53,5 +53,18 @@ Alice keeps $r$ on $s_1$ and knows from experience with how $s_1$
 enforces security that $u$ is not able to delete $r$. However after
 migrating $r$ to $s_2$, to Alice's dismay, $u$ deletes $r$.
 
-
-TODO bullet point list of contribs
+This proposal aims to achieve the following objectives.
+\begin{description}
+  \item[Formal specification] Make the WAC specification unambiguous
+    and consistent so to be able to produce implementations that can
+    be trusted to be secure and correct; Extend the specification to
+    cater to data sharing through advanced cryptography which allows
+    to selectively disclose only some parts of the data or have algorithms
+    process encrypted data without revealing any actual content.
+  \item[Access control policies] A domain-specific language to express
+    access control rules in a language close to plain English.
+  \item[Decentralised, trusted access control] Decentralised network
+    to empower end-users to share and migrate their data and policies
+    among servers without the risk of data breaches due to different
+    WAC implementations interpreting the specification differently.
+\end{description}

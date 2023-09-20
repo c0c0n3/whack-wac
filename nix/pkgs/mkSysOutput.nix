@@ -17,6 +17,16 @@
     name = "whack-wac-shell";
     paths = [ haskell tex ];
   };
+
+  packages.${system}.proposal = with sysPkgs;
+  let
+    mkPdf = nixie.pkgs.${system}.tex.mkPdfs;
+  in mkPdf {
+    pkgName = "trustchain-proposal";
+    srcDir = ../../trustchain/tex;
+    targetFiles = [ "main.tex" ];
+    extraPkgs = [ "alegreya" "eulervm" "sourcecodepro" ];
+  };
 }
 # NOTE
 # ----

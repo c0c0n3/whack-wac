@@ -7,7 +7,7 @@ To build the proposal with Nix
 ```bash
 $ cd nix
 $ nix build .#proposal
-$ open result/trustchain-proposal.pdf
+$ open result/main.pdf
 ```
 
 To fool around with LaTeX at the CLI

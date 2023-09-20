@@ -1,0 +1,32 @@
+\input{./util/preamble}
+\input{./util/commands}
+% Bibliography.
+\usepackage{biblatex}
+\addbibresource{./refs/db.bib}
+% Images.
+\usepackage{graphicx}
+\graphicspath{ {./media/} }
+\usepackage{wrapfig}
+
+\begin{document}
+
+\cover{The WAC Machine}%
+{Decentralised, provably secure and consistent Web Access Control}
+
+\input{./sec-1/main}
+\newpage
+\input{./sec-2/main}
+\newpage
+\input{./sec-3/main}
+\input{./sec-3/concept}
+\newpage
+\input{./sec-3/solution}
+\newpage
+\input{./sec-3/impact}
+\input{./sec-3/business}
+\input{./sec-3/implementation}
+\newpage
+
+\printbibliography
+
+\end{document}

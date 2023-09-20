@@ -1,0 +1,41 @@
+\documentclass[reqno]{amsart}
+
+% Include AMS math functionality.
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+
+% Unicode input.
+\usepackage[utf8]{inputenc}
+
+% Fonts: Alegreya for plain content, Euler in maths mode and Source Code Pro
+% for typewriter---see https://tex.stackexchange.com/questions/215823.
+\usepackage[T1]{fontenc}
+\usepackage{sourcecodepro}
+%\usepackage[math]{iwona}
+% NOTE. To use Iwona instead of Alegreya, remove Source Code Pro too.
+\usepackage{Alegreya}
+\usepackage{eulervm}
+
+
+% Separate paragraphs.
+% - https://tex.stackexchange.com/questions/40429
+\usepackage{parskip}
+% \setlength{\parskip}{\bigskipamount}
+
+% Use hollow squares for list items.
+\usepackage{latexsym}
+\makeatletter
+\AtBeginDocument{
+  \def\labelitemi{\(\Box\)}
+}
+
+% Enable links in PDF output, making them black and w/ no frame around.
+% Also sections will be displayed in bookmarks pane.
+\usepackage[colorlinks,linkcolor=black,citecolor=black]{hyperref}
+
+% Source code listings.
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize, tabsize=2,
+        mathescape=true, frameround=fttt}

@@ -15,7 +15,7 @@ To fool around with LaTeX at the CLI
 ```bash
 $ cd nix
 $ nix shell
-$ cd ../trustchain/tex
+$ cd ../trustchain/tex/proposal
 $ ./build.sh
 $ open main.pdf
 ```

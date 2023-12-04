@@ -23,7 +23,7 @@
     mkPdf = nixie.pkgs.${system}.tex.mkPdfs;
   in mkPdf {
     pkgName = "trustchain-proposal";
-    srcDir = ../../trustchain/tex;
+    srcDir = ../../trustchain/tex/proposal;
     targetFiles = [ "main.tex" ];
     extraPkgs = [ "alegreya" "eulervm" "sourcecodepro" ];
   };

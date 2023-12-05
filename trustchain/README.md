@@ -10,14 +10,19 @@ $ nix build .#proposal
 $ open result/main.pdf
 ```
 
+To build the presentation do the same but use `.#interview` instead
+of `.#proposal`.
+
 To fool around with LaTeX at the CLI
 
 ```bash
 $ cd nix
 $ nix shell
-$ cd ../trustchain/tex
+$ cd ../trustchain/tex/proposal
 $ ./build.sh
 $ open main.pdf
+
+# ditto for the presentation
 ```
 
 To run the Haskell scripts

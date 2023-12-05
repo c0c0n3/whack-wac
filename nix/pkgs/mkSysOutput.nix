@@ -18,15 +18,30 @@
     paths = [ haskell tex ];
   };
 
-  packages.${system}.proposal = with sysPkgs;
-  let
-    mkPdf = nixie.pkgs.${system}.tex.mkPdfs;
-  in mkPdf {
-    pkgName = "trustchain-proposal";
-    srcDir = ../../trustchain/tex;
-    targetFiles = [ "main.tex" ];
-    extraPkgs = [ "alegreya" "eulervm" "sourcecodepro" ];
+  packages.${system} = {
+
+    proposal = with sysPkgs;
+    let
+      mkPdf = nixie.pkgs.${system}.tex.mkPdfs;
+    in mkPdf {
+      pkgName = "trustchain-proposal";
+      srcDir = ../../trustchain/tex/proposal;
+      targetFiles = [ "main.tex" ];
+      extraPkgs = [ "alegreya" "eulervm" "sourcecodepro" ];
+    };
+
+    interview = with sysPkgs;
+    let
+      mkPdf = nixie.pkgs.${system}.tex.mkPdfs;
+    in mkPdf {
+      pkgName = "trustchain-interview";
+      srcDir = ../../trustchain/tex/interview;
+      targetFiles = [ "main.tex" ];
+      extraPkgs = [ "fira" ];
+    };
+
   };
+
 }
 # NOTE
 # ----
